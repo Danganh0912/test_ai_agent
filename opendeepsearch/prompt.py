@@ -14,8 +14,8 @@ def _generate_tools_section():
     for i, cls in enumerate(tool_classes, start=1):
         name = getattr(cls, "name", cls.__name__)
         desc = getattr(cls, "description", "No description provided.")
-        inp = getattr(cls, "inputs", "No input spec provided.")
-        out = getattr(cls, "output_type", "No output spec provided.")
+        inp = getattr(cls, "inputs", "No input provided.")
+        out = getattr(cls, "output_type", "No output_type provided.")
 
         lines.append(f"{i}. {name}")  
         lines.append(f"   - Description: {desc}")  
