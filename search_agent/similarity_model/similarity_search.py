@@ -43,21 +43,3 @@ class SimilaritySearch:
     def get_retrieved_documents(self, query: str, documents: List[str], top_k: int) -> List[Tuple[str, float]]:
         indices, scores = self.rerank(query, documents, top_k)
         return [(documents[i], scores[j]) for j, i in enumerate(indices)]
-
-# if __name__ == "__main__":
-#     similarity_search = SimilaritySearch("jinaai/jina-embeddings-v3")
-
-#     documents = [
-#         "The quick brown fox jumps over the lazy dog.",
-#         "A fast auburn fox leaps over a sleepy canine.",
-#         "An unrelated sentence about machine learning and AI.",
-#         "Another document discussing Python programming."
-#     ]
-#     query = "fox jumping over dog"
-#     top_k = 2
-
-#     results = similarity_search.get_retrieved_documents(query, documents, top_k)
-
-
-#     for doc, score in results:
-#         print(f"Document: {doc}\nScore: {score:.4f}\n")

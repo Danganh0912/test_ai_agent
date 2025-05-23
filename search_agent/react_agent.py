@@ -1,11 +1,8 @@
-import sys
 import os
-current_dir = os.path.dirname(__file__)  
-project_root = os.path.abspath(os.path.join(current_dir, '..'))
-sys.path.append(project_root)
-from opendeepsearch.prompt import react_system_prompt
-from opendeepsearch.calculate_tools import CalculateTool
-from opendeepsearch.search_tool import OpenDeepSearchTool
+from .react_prompt import react_system_prompt
+from .calculate_tools import CalculateTool
+from .search_tool import OpenDeepSearchTool
+
 from langchain.schema import AgentAction, AgentFinish
 from langchain_ollama import ChatOllama
 from langchain.prompts import ChatPromptTemplate
@@ -53,7 +50,7 @@ class ReActAgent:
             formatted_steps += "Thought: "
         return formatted_steps
     
-    def execute_tool(self, tool_name: str, tool_input: str, context: str) -> str:
+    def execute_tool(self, tool_name: str, tool_input: str) -> str:
         tool_name = tool_name.strip()
         if tool_name == "calculate":
             return CalculateTool.execute(tool_input)
@@ -62,10 +59,9 @@ class ReActAgent:
         else:
             return f"Unknown tool: {tool_name}"
     
-    def run(self, user_question: str, context: str, max_iterations: int = 5) -> str:
+    def run(self, user_question: str, max_iterations: int = 5) -> str:
         messages = [
             {"role": "system", "content": self.system_prompt},
-            {"role": "system", "content": f"Context: {context}"},
             {"role": "user",   "content": (
                 f"Answer the question using ReAct.\n"
                 f"Question: {user_question}\n"
@@ -93,7 +89,7 @@ class ReActAgent:
 
             print(f"[Iter {iteration}] Executing tool: {action.tool}")
             print(f"Action Input: {action.tool_input}")
-            observation = self.execute_tool(action.tool, action.tool_input, context)
+            observation = self.execute_tool(action.tool, action.tool_input)
             print(f"Observation: {observation}")
             
             action_history.append((action.tool, action.tool_input, observation))
@@ -136,24 +132,13 @@ class ReActAgent:
             return final_answer
         except Exception as e:
             print(f"Error synthesizing from history: {e}")
-            return f"Based on the tools used, I can determine: {action_summary}"
 
-
-def get_ollama_response(user_question: str, context: str) -> str:
-    try:
-        react_agent = ReActAgent(model_name="qwen2.5:14b-instruct-q8_0", temperature=0.3)
-        response = react_agent.run(user_question, context)
-        return response
-    except Exception as e:
-        import traceback
-        error_details = traceback.format_exc()
-        print(f"Error in get_ollama_response: {e}\n{error_details}")
-        return f"Error occurred while processing your question: {str(e)}"
 
 
 if __name__ == "__main__":
-    question = "calculate for me the product and quotient of 8 and 2"
-    context = "The user wants to perform a calculation and search for information."
-    response = get_ollama_response(question, context)
+    question = "calculate for me 8-2 *(8+2) and 9-2 *(9+2)"
+
+    react_agent = ReActAgent(model_name="qwen2.5:14b-instruct-q8_0", temperature=0.3)
+    response = react_agent.run(question)
     print("\nFinal Response:")
     print(response)

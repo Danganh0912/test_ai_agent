@@ -68,7 +68,7 @@ class SerperAPI(SearchAPI):
         query: str,
         num_results: int = 8,
         stored_location: Optional[str] = None
-    ) -> SearchResult[Dict[str, Any]]:
+    ) -> SearchResult[Dict[str, Any]]:        
         if not query.strip():
             return SearchResult(error="Query cannot be empty")
 

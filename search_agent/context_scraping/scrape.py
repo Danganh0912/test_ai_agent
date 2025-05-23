@@ -1,11 +1,14 @@
 import asyncio
 from typing import List, Optional
-from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
+
+from crawl4ai import (AsyncWebCrawler, BrowserConfig, CacheMode,
+                      CrawlerRunConfig)
+
 
 class MultiURLCrawler:
     def __init__(
         self,
-        headless: bool = True,
+        headless: bool = True, 
         cache_mode: CacheMode = CacheMode.BYPASS,
         run_timeout: Optional[int] = None,
     ):
@@ -27,14 +30,14 @@ class MultiURLCrawler:
                 return_exceptions=False
             )
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     test_urls = ["https://www.geeksforgeeks.org/bubble-sort-algorithm/"]
-#     crawler = MultiURLCrawler(headless=True, cache_mode=CacheMode.BYPASS)
+    test_urls = ["https://www.worldometers.info/world-population/japan-population/"]
+    crawler = MultiURLCrawler(headless=True, cache_mode=CacheMode.BYPASS)
 
-#     results: List[Optional[str]] = asyncio.run(crawler.crawl_urls(test_urls))
+    results: List[Optional[str]] = asyncio.run(crawler.crawl_urls(test_urls))
 
-#     print(f"Fetched {len(results)} result(s).")
-#     for url, content in zip(test_urls, results):
-#         print(f"\n--- Content for {url} ---")
-#         print(content or "Failed to fetch")
+    print(f"Fetched {len(results)} result(s).")
+    for url, content in zip(test_urls, results):
+        print(f"\n--- Content for {url} ---")
+        print(content or "Failed to fetch")

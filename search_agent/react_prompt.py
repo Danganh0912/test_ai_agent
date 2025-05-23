@@ -1,11 +1,5 @@
-import sys
-import os
-current_dir = os.path.dirname(__file__)  
-project_root = os.path.abspath(os.path.join(current_dir, '..'))
-sys.path.append(project_root)
-
-from opendeepsearch.calculate_tools import CalculateTool
-from opendeepsearch.search_tool import OpenDeepSearchTool
+from .calculate_tools import CalculateTool
+from .search_tool import OpenDeepSearchTool
 
 tool_classes = [CalculateTool, OpenDeepSearchTool]
 
@@ -22,7 +16,7 @@ def _generate_tools_section():
         lines.append(f"   - Input: {inp}")  
         lines.append(f"   - Output: {out}")  
         lines.append("")
-    lines.append("# To add more tools, append the tool class to 'tool_classes'.")
+    
     return "\n".join(lines)
 
 

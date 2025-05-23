@@ -1,18 +1,13 @@
 import math
 import re
 from typing import Any, Dict
-import sys
-import os
-current_dir = os.path.dirname(__file__)  
-project_root = os.path.abspath(os.path.join(current_dir, '..'))
-sys.path.append(project_root)
 
 class CalculateTool:
     name = "calculate"
     description ="""Performs mathematical calculations and evaluations of expressions.
         Supports basic arithmetic operations, absolute values, commas in numbers,
         and multiple sub-expressions separated by 'and'."""
-    inputs = "string to calculate"
+    inputs = "expression to calculate"
     output_type = "string"
 
     @staticmethod
@@ -51,7 +46,7 @@ class CalculateTool:
 
 # if __name__ == "__main__":
 #     tests = [
-#         "|1876 - 1865| and |1889 - 1876|",
+#         "8-2*(8+2) and 9-2*(9+2)",
 #         "100000000 * 2",
 #         "1,127 - 283",
 #         "828 - 381 and 900 - 500",

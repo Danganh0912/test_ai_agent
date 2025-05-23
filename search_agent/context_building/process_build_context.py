@@ -16,7 +16,7 @@ class ProcessBuildContext:
 
     def __init__(self,
                  chunk_size: int = 1000,
-                 overlap_sentences: int = 2,
+                 overlap_sentences: int = 4,
                  embed_model_name: str = 'jinaai/jina-embeddings-v3',
                  serper_api_key: str = None,
                 ):
@@ -73,11 +73,3 @@ class ProcessBuildContext:
 
         return "\n\n".join(aggregated)
 
-if __name__ == '__main__':
-    builder = ProcessBuildContext(chunk_size=1000,
-                                  overlap_sentences=1,
-                                  embed_model_name='jinaai/jina-embeddings-v3',
-                                  serper_api_key="dfbbcebfe403a8c7bc59e021fb23333064d61780")
-    query = "what is bubble sort?"
-    contexts = builder.build_context(query, top_k=3)
-    print(contexts)

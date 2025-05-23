@@ -1,13 +1,9 @@
+import os
 
 import dotenv
-import sys
-import os
-current_dir = os.path.dirname(__file__)  
-project_root = os.path.abspath(os.path.join(current_dir, '..'))
-sys.path.append(project_root)
-from langchain_ollama import ChatOllama
+from search_agent.context_building.process_build_context import ProcessBuildContext
 from langchain.prompts import ChatPromptTemplate
-from opendeepsearch.context_building.process_build_context import ProcessBuildContext
+from langchain_ollama import ChatOllama
 
 dotenv.load_dotenv()
 
@@ -24,14 +20,13 @@ class OpenDeepSearchTool:
     output_type = "string"
 
     def __init__(self,
-                 chunk_size: int = 1000,
+                 chunk_size: int = 1500,
                  overlap_sentences: int = 2,
                  embed_model_name: str = 'jinaai/jina-embeddings-v3',
                  serper_api_key: str = None,
                  top_k: int = 5,
                  llm_model: str = "openchat:7b-v3.5-1210-q4_K_M",
                  temperature: float = 0.3):
-        # Initialize components
         self.builder = ProcessBuildContext(
             chunk_size=chunk_size,
             overlap_sentences=overlap_sentences,
@@ -53,8 +48,7 @@ class OpenDeepSearchTool:
     def answer(self, user_question: str, context: str) -> str:
         try:
             chat_ollama = ChatOllama(model=self.llm_model, temperature=self.temperature)
-            search_answer_prompt = """You are an AI-powered search agent that takes in a user`s search query, retrieves relevant search results, and provides an accurate and concise answer based on the provided context.
-"""
+            search_answer_prompt = """You are an AI-powered search agent that takes in a user`s search query, retrieves relevant search results, and provides an accurate and concise answer based on the provided context"""
             prompt = ChatPromptTemplate.from_messages([
                 ("system", search_answer_prompt),
                 ("system", "Information:\n"+ str(context)),
@@ -78,6 +72,6 @@ if __name__ == '__main__':
         llm_model="openchat:7b-v3.5-1210-q4_K_M",
         temperature=0.2
     )
-    question = "Current population of Japan and India"
+    question = "What is the current population of Japanese in 2025"
     answer = search_tool.run(question)
     print(f"Question: {question}\nAnswer: {answer}")

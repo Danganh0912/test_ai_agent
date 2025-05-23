@@ -53,9 +53,3 @@ class TextChunker:
             chunks.append(current_chunk)
 
         return chunks
-
-if __name__ == "__main__":
-    text = "First paragraph. Still the first.\n\nSecond paragraph starts here and goes on? Yes!\nLast bit."
-    chunker = TextChunker(max_chunk_size=100, overlap_sentences=2)
-    for i, c in enumerate(chunker.chunk_text(text)):
-        print(f"--- Chunk {i+1} ---\n{c}\n")
